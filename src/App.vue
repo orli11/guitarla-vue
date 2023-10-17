@@ -9,10 +9,23 @@ const guitarras = ref([])
 const carrito = ref([])
 
 const agregarCarrito = (guitarra) => {
-    //console.log(guitarra)
-    carrito.value.push(guitarra)
+    const existeCarrito = carrito.value.findIndex(producto => producto.id === guitarra.id)
+    if(existeCarrito >= 0) {
+        carrito.value[existeCarrito].cantidad++
+    } else {
+        guitarra.cantidad = 1
+        carrito.value.push(guitarra)
+    } 
 }
 
+const decrementarCantidad = () => {
+    const index = carrito.value.findIndex(producto => producto.id === id)
+    carrito.value[index].cantidad--
+}
+const incrementarCantidad = () => {
+    const index = carrito.value.findIndex(producto => producto.id === id)
+    carrito.value[index].cantidad++
+}
 onMounted(() => {
    guitarras.value = db
 })
@@ -21,6 +34,8 @@ onMounted(() => {
 <template>
     <Header 
         :carrito="carrito"
+        @decrementar-cantidad="decrementarCantidad"
+        @incrementar-cantidad="incrementarCantidad"
     />
     <main class="container-xl mt-5">
         <h2 class="text-center">Nuestra Colección</h2>
